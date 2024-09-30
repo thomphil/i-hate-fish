@@ -1,4 +1,4 @@
-import { Method } from "../App";
+import { Method } from "../Method";
 
 class GameRuntime {
     private running: boolean = false;
@@ -9,13 +9,17 @@ class GameRuntime {
     // methodsStateRef, setFishErradicated, setFishCount
     constructor(
         private methodsStateRef: React.MutableRefObject<Array<Method>>,
+        private setMethodsState: (value: Array<Method> | ((prevState: Array<Method>) => Array<Method>)) => void,
         private setFishErradicated: (value: number | ((prevState: number) => number)) => void,
         private setFishCount: (value: number | ((prevState: number) => number)) => void,
+        private setFishPerSecond: (value: number | ((prevState: number) => number)) => void,
         fps: number = 60
     ) {
         this.methodsStateRef = methodsStateRef;
+        this.setMethodsState = setMethodsState;
         this.setFishErradicated = setFishErradicated;
         this.setFishCount = setFishCount;
+        this.setFishPerSecond = setFishPerSecond;
 
         this.gameLoop = this.gameLoop.bind(this);
         this.frameDuration = 1000 / fps;
@@ -56,6 +60,20 @@ class GameRuntime {
         const bonus = Math.floor(Math.log10(method.count) / 1);
         fishCaught *= Math.pow(10, bonus);
 
+        const fishPerSecond = fishCaught / (deltaTime / 1000);
+
+        this.setMethodsState((methodsState) => {
+            return methodsState.map((m: Method) => {
+                if (m.name === method.name) {
+                    return {
+                        ...m,
+                        fps: fishPerSecond,
+                    };
+                }
+                return m;
+            });
+        })
+
         return fishCaught;
     }
 
@@ -65,6 +83,9 @@ class GameRuntime {
         this.methodsStateRef.current.forEach((method) => {
             fishCaught += this.calculateFishCaught(method, deltaTime)
         });
+
+        const fishPerSecond = fishCaught / (deltaTime / 1000);
+        this.setFishPerSecond(fishPerSecond);
 
         this.setFishCount((fishCount: number) => fishCount + fishCaught);
         this.setFishErradicated((fishErradicated: number) => fishErradicated + fishCaught);

@@ -16,7 +16,7 @@
   flex: 1 1 30%;
   font-size: 1em;
   font-weight: bold;
-  border: 1px solid #646cff;
+  border: 1px solid #95d4d3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: #646cff;
+  color: #daeefb;
   width: 60%;
   padding-left: 1em;
 }
@@ -55,6 +55,7 @@
   gap: 1em;
   padding-right: 1em;
   padding-bottom: 1em;
+  width: 30%;
 }
 
 .button-event {
@@ -64,14 +65,13 @@
   border: 0;
   width: fit-content;
   height: fit-content;
-}
-
-.button-event {
+  border-radius: 33px 10px 10px 10px;
   box-sizing: border-box;
-  border: 5px solid white; 
-  border-radius: 8px;
+  border: 5px solid rgba(255, 255, 255, 0.518); 
   pointer-events: auto;
   width: 100%;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .button-event button, .button-event input {
@@ -81,9 +81,39 @@
 
 /* turn any children buttons green */
 .button-event.active {
-  border: 5px solid green;
+  border: 5px solid rgb(35, 111, 243);
 }
 
-.button-event button:disabled {
-  pointer-events: none;
+.button-event .button {
+  box-sizing: border-box;
+  text-align: center;
+  width: 100%;
+  padding: 0.5em;
+}
+
+.button-event .button.disabled {
+  transition: color 1s;
+  color: grey;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-bar-container {
+  width: 106%;
+  /* offset to the left */
+  margin-left: -3%;
+  height: 15px;
+  background-color: #e0e0e0;
+  overflow: hidden;
+  padding: 2px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.progress-bar {
+  box-sizing: border-box;
+  height: 100%;
+  background-color: #33ff05;
+  width: 0;
+  /* transition: width 0.01s ease-in-out; */
 }

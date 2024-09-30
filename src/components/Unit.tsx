@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Method } from '../App';
+import { Method } from '../Method';
+import { formatNumber } from '../core/Utilities';
 
 type UnitParams = {
     method: Method;
     fishCountRef: React.MutableRefObject<number>
-    clickRateRef: React.MutableRefObject<number>
+    clickRate: number;
     setFishCount: (value: number | ((prevState: number) => number)) => void;
-    setMethodsState: (value: any) => void | ((prevState: any) => any);
+    setMethodsState: (value: Array<Method> | ((prevState: Array<Method>) => Array<Method>)) => void;
   };
 
 const Unit = ({
   method,
   fishCountRef,
-  clickRateRef,
+  clickRate,
   setFishCount,
   setMethodsState,
   }: UnitParams) => {
@@ -20,12 +21,13 @@ const Unit = ({
     const upgradeIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const [isBuyActive, setIsBuyActive] = useState(false);
     const [isUpgradeActive, setIsUpgradeActive] = useState(false);  
+    const [buyProgressWidth, setBuyProgressWidth] = useState(0);
+    const [upgradeProgressWidth, setUpgradeProgressWidth] = useState(0);
+
     const countRef = useRef(method.count);
     const levelRef = useRef(method.level);
     const priceRef = useRef(0);
     const upgradePriceRef = useRef(0);
-    const buyProgressionRef = useRef(0);
-    const upgradeProgressionRef = useRef(0);
 
     useEffect(() => {
       countRef.current = method.count;
@@ -45,12 +47,12 @@ const Unit = ({
 
     useEffect(() => {
       // percent of price left to save
-      buyProgressionRef.current = fishCountRef.current / priceRef.current;
+      setBuyProgressWidth((fishCountRef.current / priceRef.current) * 100);
     }, [priceRef.current, fishCountRef.current]);
 
     useEffect(() => {
       // percent of price left to save
-      upgradeProgressionRef.current = fishCountRef.current / upgradePriceRef.current;
+      setUpgradeProgressWidth((fishCountRef.current / upgradePriceRef.current) * 100);
     }, [upgradePriceRef.current, fishCountRef.current]);
 
     useEffect(() => {
@@ -70,23 +72,9 @@ const Unit = ({
       return method.basePrice * 100 * (method.level + 1)
     }
 
-    const getFishPerSecond = () => {
-      let fishPerSecond = method.count * method.efficiency;
-
-      if (method.level > 0) {
-        fishPerSecond *= method.level * 5;
-      }
-
-      const bonus = Math.floor(Math.log10(method.count) / 1);
-      fishPerSecond *= Math.pow(10, bonus);
-
-      // return engineering notation
-      return Intl.NumberFormat('en-US', { notation: 'engineering' }).format(fishPerSecond);
-    }
-
     const setMethodAttribute = (attribute: string, value: number) => {
-      setMethodsState((methodsState: Array<Method>) => {
-        return methodsState.map((m: any) => {
+      setMethodsState((methodsState) => {
+        return methodsState.map((m: Method) => {
           if (m.name === method.name) {
             return {
               ...m,
@@ -101,8 +89,6 @@ const Unit = ({
     const buy = () => {
       // click rate between 0 and 100
       // click this many times a second
-      const clickRate = clickRateRef.current;
-  
       const interval = setInterval(() => {
         setFishCount((prevFishCount) => {
           const price = priceRef.current;
@@ -145,8 +131,6 @@ const Unit = ({
     }
 
     const upgrade = () => {
-      const clickRate = clickRateRef.current;
-
       const interval = setInterval(() => {
         setFishCount((prevFishCount) => {
           const price = upgradePriceRef.current;
@@ -173,10 +157,10 @@ const Unit = ({
         <h3>{method.name}</h3>
         <div className="method-body">
           <div className="stats">
-            <div>Count: {Intl.NumberFormat('en-US', { notation: 'engineering' }).format(method.count)}</div>
-            <div>Buy: {Intl.NumberFormat('en-US', { notation: 'engineering' }).format(calculatePrice())}</div>
-            <div>Upgrade: {Intl.NumberFormat('en-US', { notation: 'engineering' }).format(calculateUpgradePrice())}</div>
-            <div>FPS: {getFishPerSecond()}</div>
+            <div>Count: {formatNumber(method.count)}</div>
+            <div>Buy: {formatNumber(calculatePrice())}</div>
+            <div>Upgrade: {formatNumber(calculateUpgradePrice())}</div>
+            <div>FPS: {formatNumber(method.fps)}</div>
           </div>
           
           <div className="buttons">
@@ -184,15 +168,25 @@ const Unit = ({
             className={`button-event ${isBuyActive ? 'active' : ''}`}
             onClick={() => buttonToggle('buy')}
             >
-            <button disabled={calculatePrice() > fishCountRef.current} >Buy</button>
-            <input type="range" min="0" max="1" step="0.0001" value={buyProgressionRef.current} disabled/>
+            <div className={`button ${calculatePrice() > fishCountRef.current ? "disabled" : ""}`} >Buy</div>
+            <div className="progress-bar-container">
+              <div
+                className="progress-bar"
+                style={{ width: `${buyProgressWidth}%` }}
+              ></div>
+            </div>
           </div>
           <div
             className={`button-event ${isUpgradeActive ? 'active' : ''}`}
             onClick={() => buttonToggle('upgrade')}
           >
-            <button disabled={calculateUpgradePrice() > fishCountRef.current} >Upgrade</button>
-            <input type="range" min="0" max="1" step="0.0001" value={upgradeProgressionRef.current} disabled/>
+            <div className={`button ${calculateUpgradePrice() > fishCountRef.current ? "disabled" : ""}`} >Upgrade</div>
+            <div className="progress-bar-container">
+              <div
+                className="progress-bar"
+                style={{ width: `${upgradeProgressWidth}%` }}
+              ></div>
+            </div>
           </div>
           </div>
         </div>
