@@ -1,0 +1,89 @@
+.header {
+  display: flex;
+  padding: 1em;
+  gap: 2em;
+}
+
+.methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-top: 1em;
+  justify-content: space-evenly;
+}
+
+.method {
+  flex: 1 1 30%;
+  font-size: 1em;
+  font-weight: bold;
+  border: 1px solid #646cff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.method-body {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  width: 100%; 
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #646cff;
+  width: 60%;
+  padding-left: 1em;
+}
+
+.stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  flex-wrap: wrap; /* Allow wrapping */
+  overflow: hidden; /* Prevent overflow */
+  word-wrap: break-word; /* Break long words */
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+
+.button-event {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  width: fit-content;
+  height: fit-content;
+}
+
+.button-event {
+  box-sizing: border-box;
+  border: 5px solid white; 
+  border-radius: 8px;
+  pointer-events: auto;
+  width: 100%;
+}
+
+.button-event button, .button-event input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* turn any children buttons green */
+.button-event.active {
+  border: 5px solid green;
+}
+
+.button-event button:disabled {
+  pointer-events: none;
+}
