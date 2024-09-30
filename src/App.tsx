@@ -106,7 +106,7 @@ const App = () => {
   const [fishErradicated, setFishErradicated] = useState(10);
   const [fishCount, setFishCount] = useState(10);
   const [methodsState, setMethodsState] = useState(initialMethodsState);
-  const clickRate = 100
+  const clickRate = 100;
 
   const fishCountRef = useRef(fishCount);
   const methodsStateRef = useRef(methodsState);
