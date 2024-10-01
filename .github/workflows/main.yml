@@ -14,12 +14,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Use Node.js version from .nvmrc
+        id: nvmrc
         run: |
-          # Read the version from .nvmrc
-          NODE_VERSION=$(cat .nvmrc)
-          echo "Using Node.js version: $NODE_VERSION"
-          # Use actions/setup-node to set up Node.js with the version from .nvmrc
-          echo "node-version: $NODE_VERSION" >> $GITHUB_ENV
+          # Read the version from .nvmrc and strip the 'v' if present
+          NODE_VERSION=$(cat .nvmrc | sed 's/v//')
+          echo "NODE_VERSION=$NODE_VERSION" >> $GITHUB_ENV
         shell: bash
 
       - name: Set up Node.js
