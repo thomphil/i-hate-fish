@@ -58,7 +58,7 @@ class GameRuntime {
 
         // for every magnitude of 1000, multiply by 10
         const bonus = Math.floor(Math.log10(method.count) / 1);
-        fishCaught *= Math.pow(10, bonus);
+        fishCaught *= Math.pow(10, bonus) * 10;
 
         const fishPerSecond = fishCaught / (deltaTime / 1000);
 

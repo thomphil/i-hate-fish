@@ -7,13 +7,14 @@ import GameRuntime from './core/GameRuntime';
 import BonusTable from './components/BonusTable';
 import { initialMethodsState } from './Method.tsx';
 import { formatNumber } from './core/Utilities.ts';
+import FishDial from './components/FishDial';
 
 const App = () => {
   const [fishErradicated, setFishErradicated] = useState(10);
   const [fishCount, setFishCount] = useState(10);
   const [fishPerSecond, setFishPerSecond] = useState(0);
   const [methodsState, setMethodsState] = useState(initialMethodsState);
-  const clickRate = 1000;
+  const clickRate = 100;
 
   const fishCountRef = useRef(fishCount);
   const methodsStateRef = useRef(methodsState);
@@ -37,6 +38,7 @@ const App = () => {
 
   return (
     <div>
+      <FishDial fishPerSecond={fishPerSecond}/>
       <div className="header">
         <div>
           <BonusTable divider={1} />

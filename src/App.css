@@ -105,15 +105,13 @@
   height: 15px;
   background-color: #e0e0e0;
   overflow: hidden;
-  padding: 2px;
   box-sizing: border-box;
-  border-radius: 8px;
 }
 
 .progress-bar {
   box-sizing: border-box;
   height: 100%;
-  background-color: #33ff05;
+  background-color: #33ff05a7;
   width: 0;
   /* transition: width 0.01s ease-in-out; */
 }

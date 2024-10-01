@@ -158,6 +158,7 @@ const Unit = ({
         <div className="method-body">
           <div className="stats">
             <div>Count: {formatNumber(method.count)}</div>
+            <div>Upgrade Level: {formatNumber(method.level)}</div>
             <div>Buy: {formatNumber(calculatePrice())}</div>
             <div>Upgrade: {formatNumber(calculateUpgradePrice())}</div>
             <div>FPS: {formatNumber(method.fps)}</div>

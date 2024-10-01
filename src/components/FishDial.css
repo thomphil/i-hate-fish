@@ -1,0 +1,27 @@
+.gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+}
+
+.gauge-svg {
+  width: 400px;
+  height: 400px;
+}
+
+.gauge-needle {
+  transition: transform 0.3s ease-out;
+}
+
+.gauge-value {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+
+.gauge-range {
+  margin-top: 5px;
+  font-size: 1em;
+  color: #666;
+}
