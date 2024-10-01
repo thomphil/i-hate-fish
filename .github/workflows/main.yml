@@ -1,0 +1,40 @@
+name: Deploy Vite React App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment on push to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js version from .nvmrc
+        run: |
+          # Read the version from .nvmrc
+          NODE_VERSION=$(cat .nvmrc)
+          echo "Using Node.js version: $NODE_VERSION"
+          # Use actions/setup-node to set up Node.js with the version from .nvmrc
+          echo "node-version: $NODE_VERSION" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build TypeScript and Vite project
+        run: npm run build  # This will run tsc -b && vite build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist  # Vite's default output directory
